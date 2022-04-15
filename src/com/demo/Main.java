@@ -1,4 +1,4 @@
-package com.company;
+package com.demo;
 
 public class Main {
 
@@ -15,7 +15,7 @@ public class Main {
         print_notes_required(main_array);
     }
 
-    public static int[][] perform_calculation(int[] note_values, int[][] main_array, int amount ){
+    public static void perform_calculation(int[] note_values, int[][] main_array, int amount ){
         int note_value_index = 0;
         for (int value : note_values) {
             if (value != 1) {
@@ -28,7 +28,6 @@ public class Main {
             }
             note_value_index++;
         }
-        return main_array;
     }
 
     public static int[][] main_array(int[] note_values){
