@@ -10,18 +10,18 @@ public class Main {
         int[][] main_array = main_array(note_values);
 
         int amount = 147;
-        perform_calculation(note_values, main_array, amount);
+        perform_calculation(main_array, amount);
 
         print_notes_required(main_array);
     }
 
-    public static void perform_calculation(int[] note_values, int[][] main_array, int amount ){
+    public static void perform_calculation(int[][] main_array, int amount ){
         int note_value_index = 0;
-        for (int value : note_values) {
-            if (value != 1) {
-                if (amount >= value) {
-                    main_array[note_value_index][1] = amount / value;
-                    amount -= main_array[note_value_index][1] * value;
+        for (int[] value : main_array) {
+            if (value[0] != 1) {
+                if (amount >= value[0]) {
+                    main_array[note_value_index][1] = amount / value[0];
+                    amount -= main_array[note_value_index][1] * value[0];
                 }
             } else {
                 main_array[note_value_index][1] = amount;
