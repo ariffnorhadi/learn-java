@@ -79,7 +79,7 @@ public class TicTacToe {
                 }
                 if (arrBoard[i][j] != 0 && arrBoard[i][j] == arrBoard[i][j + 1]) { // compare one column next to each other, eg: column 1 and column 2, if true, we increment the variable number
                     number++;
-                    if (j == arrBoard.length - 2) { // this means, first checking (column 1 and column 2 is matched already), else we already go to next row (line 87)
+                    if (j == arrBoard.length - 2) { // this means, first checking (column 1 and column 2 is matched already), else we already go to next row (line 88)
                         // so first checking done, then second checking also match (column 2 and 3)
                         win = true; // so we are breaking the whole loop (refer line 74)
                         number = number - 1; // number here can be 5 or 8, so we want it to be 4 or 7
