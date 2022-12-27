@@ -10,43 +10,35 @@ public class TicTacToe {
 
     public static void main(String[] args) {
 
-        // Declare and assign players, blank
         int X = 1;
         int O = -1;
 
         int[][] arrBoard = {
-                {1, 1, 0},
-                {1, 1, 1},
-                {0, 0, 0}
+                { 1,-1, 1 },
+                { 0, 0, 0 },
+                { 1, 1, 1 }
         };
 
-        // Declare board
         int winner = evaluateWinner(arrBoard);
 
+        printBoard(arrBoard);
+
         if (winner == X) {
-            System.out.println("\n1 Won");
+            System.out.print("\nX (1) Won");
         } else if (winner == O) {
-            System.out.println("\n-1 Won");
+            System.out.print("\nO (-1) Won");
         } else {
-            System.out.println("It's a tie ! No one wins ! Please try again.");
+            System.out.print("It's a tie ! No one wins ! Please try again.");
         }
 
-        System.out.println(winByRow(arrBoard));
-        System.out.println(get_row_number_starter(arrBoard));
-        System.out.println(get_winner_evidence(get_row_number_starter(arrBoard), arrBoard));
+        System.out.println(" (" + get_winner_evidence(get_row_number_starter(arrBoard), arrBoard) + ") ");
 
     }
 
-    final static int[][] matrix = {
-            {1, 2, 3},
-            {4, 5, 6},
-            {7, 8, 9}
-    };
-
-    public static void printBoard() {
-        for (int i = 0; i < matrix.length; i++) { // this equals to the row in our matrix.
-            for (int j = 0; j < matrix[i].length; j++) { // this equals to the column in each row.
-                System.out.print(matrix[i][j] + " ");
+    public static void printBoard(int[][] arrBoard) {
+        for (int i = 0; i < arrBoard.length; i++) { // this equals to the row in our matrix.
+            for (int j = 0; j < arrBoard[i].length; j++) { // this equals to the column in each row.
+                System.out.print(arrBoard[i][j] + " ");
             }
             System.out.println(); // change line on console as row comes to end in the matrix.
         }
@@ -75,45 +67,29 @@ public class TicTacToe {
         return 0;
     }
 
-    public static boolean winByRow(int[][] arrBoard) {
-        boolean match = false;
-        for (int i = 0; i < arrBoard.length; i++) {
-            if (match) break;
-            for (int j = 0; j < arrBoard.length; j++) {
-                if (j == arrBoard.length - 1) break;
-                if (arrBoard[i][j] != 0 && arrBoard[i][j] == arrBoard[i][j + 1]) {
-                    match = true;
-                    break;
-                }
-            }
-        }
-        return match;
-    }
-
     public static int get_row_number_starter(int[][] arrBoard) {
-        int number = 0;
-        boolean match = false;
+        int number = 0; // start with zero, will increment this with each loop below
+        boolean win = false; // once we set this to true / we find the matched row, we want to break the loop.
         for (int i = 0; i < arrBoard.length; i++) {
-            if (match) break;
+            if (win) // no need to go next row if we find the matched row already
+                break;
             for (int j = 0; j < arrBoard.length; j++) {
-                if (j == arrBoard.length - 1) {
+                if (j == arrBoard.length - 1) { // the logic is to compare column 1 and the next column (still at same row), so once we reach the second last column, that should be the last loop
                     break;
                 }
-                if (arrBoard[i][j] != 0 && arrBoard[i][j] == arrBoard[i][j + 1]) {
-                    if (j == arrBoard.length - 2) {
-                        match = true;
-                        number = number - 1;
+                if (arrBoard[i][j] != 0 && arrBoard[i][j] == arrBoard[i][j + 1]) { // compare one column next to each other, eg: column 1 and column 2, if true, we increment the variable number
+                    number++;
+                    if (j == arrBoard.length - 2) { // this means, first checking (column 1 and column 2 is matched already), else we already go to next row (line 87)
+                        // so first checking done, then second checking also match (column 2 and 3)
+                        win = true; // so we are breaking the whole loop (refer line 74)
+                        number = number - 1; // number here can be 5 or 8, so we want it to be 4 or 7
                         break;
                     }
-                    number++;
                 } else {
-                    number = number + arrBoard.length;
+                    number = number + arrBoard.length; // let say, number is 1, so row 1 no match, we will go next row, so should start with 4 (or add the number with size of array)
                     break;
                 }
             }
-        }
-        if (number == 0) {
-            number = 1;
         }
         return number;
     }
@@ -125,103 +101,6 @@ public class TicTacToe {
             row_number++;
         }
         return evidence;
-    }
-
-    public static boolean winByCol(int[][] arrBoard) {
-        boolean winByCol = false;
-        for (int i = 0; i < arrBoard.length; i++) {
-            if (0 != arrBoard[i][0] &&
-                    arrBoard[i][0] == arrBoard[i][1] && arrBoard[i][1] == arrBoard[i][2]) {
-                winByCol = true;
-            }
-        }
-        return winByCol;
-    }
-
-    public static boolean winsByDiagonals(int[][] arrBoard) {
-        boolean winByDiagonals = false;
-        if (arrBoard[1][1] != 0 &&
-                ((arrBoard[0][0] == arrBoard[1][1] && arrBoard[1][1] == arrBoard[2][2])
-                        || (arrBoard[0][2] == arrBoard[1][1] && arrBoard[1][1] == arrBoard[2][0]))) {
-            winByDiagonals = true;
-        }
-        return winByDiagonals;
-    }
-
-    public static int getrow(int[][] arrBoard) {
-        int row = 0;
-        for (int i = 0; i < arrBoard.length; i++) {
-            if (0 != arrBoard[0][i] &&
-                    arrBoard[0][i] == arrBoard[1][i] && arrBoard[1][i] == arrBoard[2][i]) {
-                row = i;
-            }
-        }
-        return row;
-    }
-
-    public static int getCol(int[][] arrBoard) {
-        int row = 0;
-        for (int i = 0; i < arrBoard.length; i++) {
-            if (0 != arrBoard[i][0] &&
-                    arrBoard[i][0] == arrBoard[i][1] && arrBoard[i][1] == arrBoard[i][2]) {
-                row = i + 1;
-            }
-        }
-        if (row != 1) {
-            row = row + 1;
-        }
-        return row;
-    }
-
-    public static int getDiagonals(int[][] arrBoard) {
-        int diagonals = 0;
-        for (int i = 0; i < arrBoard.length; i++) {
-            if (arrBoard[1][1] != 0 &&
-                    ((arrBoard[0][0] == arrBoard[1][1] && arrBoard[1][1] == arrBoard[2][2])
-                            || (arrBoard[0][2] == arrBoard[1][1] && arrBoard[1][1] == arrBoard[2][0]))) {
-                diagonals = i;
-            }
-        }
-        return diagonals;
-    }
-
-    public static String getRowIndex(int[][] arrBoard, int rowNum) {
-        String row = "";
-        int counter = 2;
-        if (rowNum == 0) {
-            rowNum = 1;
-        }
-        for (int i = 0; i <= counter; i++) {
-            row = row.concat(String.valueOf(rowNum));
-            rowNum++;
-        }
-        return row;
-    }
-
-    public static String getColIndex(int[][] arrBoard, int colNum) {
-        String row = "";
-        int counter = 2;
-        if (colNum == 0) {
-            colNum = 1;
-        }
-        for (int i = 0; i <= counter; i++) {
-            row = row.concat(String.valueOf(colNum));
-            colNum++;
-        }
-        return row;
-    }
-
-    public static String getDiagonalIndex(int[][] arrBoard, int diagonalNum) {
-        String row = "";
-        int counter = 2;
-        if (diagonalNum == 0) {
-            diagonalNum = 1;
-        }
-        for (int i = 0; i <= counter; i++) {
-            row = row.concat(String.valueOf(diagonalNum));
-            diagonalNum++;
-        }
-        return row;
     }
 
 }
