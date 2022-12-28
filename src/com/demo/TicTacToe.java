@@ -14,9 +14,9 @@ public class TicTacToe {
         int O = -1;
 
         int[][] arrBoard = {
-                { 1,-1, 1 },
-                { 0, 0, 0 },
-                { 1, 1, 1 }
+                {0, 1, 1},
+                {-1, -1, 1},
+                {1, 1, 1}
         };
 
         int winner = evaluateWinner(arrBoard);
@@ -68,30 +68,64 @@ public class TicTacToe {
     }
 
     public static int get_row_number_starter(int[][] arrBoard) {
-        int number = 0; // start with zero, will increment this with each loop below
-        boolean win = false; // once we set this to true / we find the matched row, we want to break the loop.
-        for (int i = 0; i < arrBoard.length; i++) {
-            if (win) // no need to go next row if we find the matched row already
+
+        // assign number each time enter new row (so we get number starter for that row)
+        int starter_number = 0;
+        // start with zero, will increment this with each loop below to keep track of where we are (matrix)
+        int matrix = 0;
+
+        // once we set this to true / we find the matched row, we want to break the
+        // loop.
+        boolean match = false;
+
+        // loop through each rows
+        for (int row_index = 0; row_index < arrBoard.length; row_index++) {
+
+            // no need to go next row if we find the matched row already
+            if (match) {
                 break;
-            for (int j = 0; j < arrBoard.length; j++) {
-                if (j == arrBoard.length - 1) { // the logic is to compare column 1 and the next column (still at same row), so once we reach the second last column, that should be the last loop
+            }
+
+            // loop through each column
+            for (int column_index = 0; column_index < arrBoard.length; column_index++) {
+                // keep track of where we are
+                matrix++;
+
+                if (column_index == 0) {
+                    // get matrix number starter for that row, only applicable when column index = 0,
+                    // if column index = 1, then we are not at the start of the row
+                    starter_number = matrix;
+                }
+
+                // the logic is to compare column 1 and the next column (at the same row)
+                // so once we reach the second last column, that should be the last loop (for checking column)
+                if (column_index == arrBoard.length - 1) {
                     break;
                 }
-                if (arrBoard[i][j] != 0 && arrBoard[i][j] == arrBoard[i][j + 1]) { // compare one column next to each other, eg: column 1 and column 2, if true, we increment the variable number
-                    number++;
-                    if (j == arrBoard.length - 2) { // this means, first checking (column 1 and column 2 is matched already), else we already go to next row (line 88)
-                        // so first checking done, then second checking also match (column 2 and 3)
-                        win = true; // so we are breaking the whole loop (refer line 74)
-                        number = number - 1; // number here can be 5 or 8, so we want it to be 4 or 7
+
+                // compare one column next to each other
+                // eg: column 1 and column 2,
+                // if value in column 1 = value in column 2,
+                // then we want to continue the loop until last loop (line 113)
+                if (arrBoard[row_index][column_index] != 0 && arrBoard[row_index][column_index] == arrBoard[row_index][column_index + 1]) {
+
+                    // once reach this line, means each checking is match until the last loop,
+                    // so we know now this row is match (all value match)
+                    // so we declare match = true to break the row loop (don't want to check other row)
+                    if (column_index == arrBoard.length - 2) {
+                        match = true;
                         break;
                     }
                 } else {
-                    number = number + arrBoard.length; // let say, number is 1, so row 1 no match, we will go next row, so should start with 4 (or add the number with size of array)
+                    // once not match, we want to skip/break the loop
+                    // then assume that we finish the whole row
+                    // so matrix now should be at the last column of the row
+                    matrix = starter_number + arrBoard.length - 1;
                     break;
                 }
             }
         }
-        return number;
+        return starter_number;
     }
 
     public static String get_winner_evidence(int row_number, int[][] arrboard) {
