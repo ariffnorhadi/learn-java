@@ -153,7 +153,7 @@ public class TicTacToe {
                 // compare one column next to each other
                 // eg: column 1 and column 2,
                 // if value in column 1 = value in column 2,
-                // then we want to continue the loop until last loop (line 113)
+                // then we want to continue the loop until last loop
                 if (arrBoard[row_index][column_index] != 0 && arrBoard[row_index][column_index] == arrBoard[row_index][column_index + 1]) {
 
                     // once reach this line, means each checking is match until the last loop,
