@@ -15,7 +15,7 @@ public class TicTacToe {
 
         int[][] arrBoard = {
                 {0, 1, 1},
-                {-1, -1, 1},
+                {0, 0, 0},
                 {1, 1, 1}
         };
 
@@ -24,14 +24,17 @@ public class TicTacToe {
         printBoard(arrBoard);
 
         if (winner == X) {
-            System.out.print("\nX (1) Won");
+            System.out.println("\nX (1) Won");
         } else if (winner == O) {
-            System.out.print("\nO (-1) Won");
+            System.out.println("\nO (-1) Won");
         } else {
-            System.out.print("It's a tie ! No one wins ! Please try again.");
+            System.out.println("It's a tie ! No one wins ! Please try again.");
         }
 
-        System.out.println(" (" + get_winner_evidence(get_row_number_starter(arrBoard), arrBoard) + ") ");
+        if (is_win_by_row(arrBoard)) {
+            System.out.println("win by row is : " + is_win_by_row(arrBoard));
+            System.out.println("(" + get_winner_evidence_by_row(get_row_number_starter(arrBoard), arrBoard) + ")");
+        }
 
     }
 
@@ -65,6 +68,50 @@ public class TicTacToe {
             return arrBoard[1][1];
         }
         return 0;
+    }
+
+    public static boolean is_win_by_row(int[][] arrBoard) {
+
+        // start value with false
+        boolean win = false;
+
+        // loop through each rows
+        for (int row_index = 0; row_index < arrBoard.length; row_index++) {
+
+            // no need to go next row if we find the matched row already
+            if (win) {
+                break;
+            }
+
+            // loop through each column
+            for (int column_index = 0; column_index < arrBoard.length; column_index++) {
+
+                // the logic is to compare column 1 and the next column (at the same row)
+                // so once we reach the second last column, that should be the last loop (for checking column)
+                if (column_index == arrBoard.length - 1) {
+                    break;
+                }
+
+                // compare one column next to each other
+                // eg: column 1 and column 2,
+                // if value in column 1 = value in column 2,
+                // then we want to continue the loop until last loop (line 113)
+                if (arrBoard[row_index][column_index] != 0 && arrBoard[row_index][column_index] == arrBoard[row_index][column_index + 1]) {
+
+                    // once reach this line, means each checking is match until the last loop,
+                    // so we know now this row is match (all value match)
+                    // so we declare win = true to break the row loop (don't want to check other row)
+                    if (column_index == arrBoard.length - 2) {
+                        win = true;
+                        break;
+                    }
+                } else {
+                    // once not match, go next row
+                    break;
+                }
+            }
+        }
+        return win;
     }
 
     public static int get_row_number_starter(int[][] arrBoard) {
@@ -128,10 +175,14 @@ public class TicTacToe {
         return starter_number;
     }
 
-    public static String get_winner_evidence(int row_number, int[][] arrboard) {
+    public static String get_winner_evidence_by_row(int row_number, int[][] arrboard) {
         String evidence = "";
         for (int i = 0; i < arrboard.length; i++) {
-            evidence = evidence.concat(String.valueOf(row_number));
+            if (i == 0) {
+                evidence = String.valueOf(row_number);
+            } else {
+                evidence = evidence.concat(", " + row_number);
+            }
             row_number++;
         }
         return evidence;
